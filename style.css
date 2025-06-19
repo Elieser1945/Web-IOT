@@ -1,0 +1,109 @@
+/* style.css */
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #eee;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* Biarkan h2 tanpa margin default di sini untuk flexbox */
+h2 {
+    margin: 0;
+}
+
+.card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 30px; /* Pertahankan padding ini */
+  margin: 20px auto;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  /* Tambahkan overflow: hidden; untuk jaga-jaga jika ada elemen yang keluar */
+  overflow: hidden;
+}
+
+/* Modifikasi .card-content-controls */
+.card-content-controls {
+  display: flex;
+  /* Gunakan gap untuk memberi jarak antar item, atau space-between jika Anda ingin mendorong ke ujung */
+  /* justify-content: space-between; */ /* Ini yang menyebabkan elemen terdorong keluar jika padding terlalu besar */
+  justify-content: flex-start; /* Mulai dari kiri */
+  align-items: center;
+  width: 100%; /* Pastikan ini 100% dari parent */
+  /* Tambahkan gap untuk jarak antara Kontrol LED dan slider */
+  gap: 20px; /* Sesuaikan nilai ini sesuai keinginan untuk jarak yang nyaman */
+}
+
+/* Sesuaikan lebar h2 agar tidak terlalu panjang, jika diperlukan */
+.card-content-controls h2 {
+    flex-shrink: 0; /* Mencegah h2 menyusut terlalu banyak */
+    white-space: nowrap; /* Mencegah teks h2 pecah baris */
+}
+
+/* Adjustments for the toggle-container */
+.toggle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0; /* Pastikan tidak ada margin yang mendorongnya */
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 90px;
+  height: 45px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 45px;
+  height: 100%;
+  width: 100%;
+}
+
+.slider::before {
+  position: absolute;
+  content: "OFF";
+  height: 37px;
+  width: 37px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+input:checked + .slider::before {
+  transform: translateX(45px);
+  content: "ON";
+  color: #4CAF50;
+}

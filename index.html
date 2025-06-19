@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IoT Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuKxp-fqrhPGGqnTPXWP11-p-sk7zcrJ8",
+      authDomain: "smarthome-f298c.firebaseapp.com",
+      databaseURL: "https://smarthome-f298c-default-rtdb.firebaseio.com",
+      projectId: "smarthome-f298c",
+      storageBucket: "smarthome-f298c.appspot.com",
+      messagingSenderId: "50265185510",
+      appId: "1:50265185510:web:a7dd6e78088c6c4b6faf27"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Sensor Elements
+    const temp = document.getElementById("temp");
+    const hum = document.getElementById("hum");
+    const motion = document.getElementById("motion");
+
+    onValue(ref(db, "sensorData"), (snapshot) => {
+      const data = snapshot.val();
+      temp.textContent = data.temperature + "°C";
+      hum.textContent = data.humidity + "%";
+      motion.textContent = data.motion === 1 ? "Terdeteksi" : "Tidak Ada";
+    });
+
+    // Kontrol LED
+    const ledToggle = document.getElementById("ledToggle");
+    ledToggle.addEventListener("change", () => {
+      set(ref(db, "control/led"), ledToggle.checked);
+    });
+
+    // Kontrol Kipas
+    const fanToggle = document.getElementById("fanToggle");
+    fanToggle.addEventListener("change", () => {
+      set(ref(db, "control/fan"), fanToggle.checked);
+    });
+
+    // Sinkronisasi status
+    onValue(ref(db, "control/led"), snap => {
+      ledToggle.checked = snap.val() === true;
+    });
+    onValue(ref(db, "control/fan"), snap => {
+      fanToggle.checked = snap.val() === true;
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>📡 IoT Dashboard</h1>
+
+    <div class="card">
+      <h2>Sensor Data</h2>
+      <p>🌡 Suhu: <span id="temp">--</span></p>
+      <p>💧 Kelembapan: <span id="hum">--</span></p>
+      <p>🚶 Gerakan: <span id="motion">--</span></p>
+    </div>
+
+    <div class="card">
+      <div class="card-content-controls"> <h2>Kontrol LED</h2>
+        <div class="toggle-container">
+          <label class="switch">
+            <input type="checkbox" id="ledToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-content-controls"> <h2>Kontrol Kipas</h2>
+        <div class="toggle-container">
+          <label class="switch">
+            <input type="checkbox" id="fanToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
